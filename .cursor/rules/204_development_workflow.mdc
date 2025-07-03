@@ -1,0 +1,41 @@
+# Development Workflow
+
+## 開発優先順位
+### Phase 1: 認証基盤（1-2日）
+1. Supabaseプロジェクト作成・設定
+2. Next.jsプロジェクト初期化
+3. GitHub OAuth認証実装
+4. ユーザープロファイル管理
+
+### Phase 2: 核心機能（3-4日）
+1. Markdownエディター実装
+2. GitHub API連携（リポジトリ取得）
+3. ファイル保存機能実装
+4. エラーハンドリング
+
+### Phase 3: UI/UX（2-3日）
+1. レスポンシブデザイン実装
+2. 保存状態フィードバック
+3. 基本的なスタイリング
+4. モバイル対応
+
+## Vercel設定
+```json
+// vercel.json
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install"
+}
+```
+
+## 環境設定
+- Production, staging, development環境
+- 適切な環境変数管理
+- Supabase CLIでデータベースマイグレーション
+
+## テスト戦略
+- ユーティリティ関数のユニットテスト
+- カスタムフックのテスト
+- API route handlerのテスト

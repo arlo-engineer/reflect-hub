@@ -1,0 +1,39 @@
+# Notion-Inspired Design Guidelines
+
+## カラーパレット
+```css
+/* Primary Colors */
+--notion-bg: #ffffff;
+--notion-bg-secondary: #f7f6f3;
+--notion-text: #37352f;
+--notion-text-light: #787774;
+--notion-border: #e9e9e7;
+--notion-accent: #2eaadc;
+
+/* Status Colors */
+--success: #0f7b0f;
+--warning: #cb912f;
+--error: #e03e3e;
+```
+
+## タイポグラフィ
+- システムフォント: Inter, -apple-system, BlinkMacSystemFont
+- フォントウェイト: 400 (normal), 500 (medium), 600 (semibold)
+- 明確な階層と一貫したスペーシング
+
+## UI Components
+- クリーンで最小限のデザイン
+- 微細なボーダーとシャドウ
+- 角丸: 小要素6px、カード8px
+- Tailwindスケールで一貫したスペーシング
+- 微細なトランジションでホバー状態
+
+## Button例
+```typescript
+<Button 
+  variant="primary" 
+  className="bg-notion-accent hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-md transition-colors"
+>
+  保存
+</Button>
+```

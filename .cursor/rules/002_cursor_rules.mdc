@@ -1,0 +1,28 @@
+# .mdc File Structure & Best Practices
+
+## ファイル命名規則
+- NNN_name.mdc (NNN = 001-299)
+- 001-099: Core/workspace rules
+- 100-199: Integration rules  
+- 200-299: Pattern rules
+- 高い番号が競合時に優先
+
+## UI Components
+### 1. Description (top)
+- 簡潔な目的の要約
+- AIコンテキストに表示
+
+### 2. Globs (top)  
+- カンマ区切りリスト
+- 例: /dir1/**/*,/dir2/**/*
+- 標準globシンタックス使用
+
+### 3. Body Text (this section)
+- 25行以下に保つ
+- 簡潔/省略記法使用
+- ファイルを@でタグ付け
+- 重要な指示にフォーカス
+
+## ベストプラクティス
+- アシスタントは.mdcファイルの変更をUIでコピー用に提案可能
+- アシスタントは.mdcファイルを直接編集すべきでない

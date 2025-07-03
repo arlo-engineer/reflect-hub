@@ -1,0 +1,33 @@
+# Performance Optimization
+
+## コード分割
+```typescript
+// 重いコンポーネントの動的インポート
+const MarkdownEditor = dynamic(() => import('@uiw/react-md-editor'), {
+  ssr: false,
+  loading: () => <EditorSkeleton />
+});
+```
+
+## キャッシング
+- React QueryでGitHub API呼び出し
+- API routeの適切なキャッシュヘッダー実装
+- 静的コンテンツのVercelエッジキャッシング使用
+
+## レスポンシブデザイン
+- モバイルファーストアプローチ
+- ブレークポイント: sm (640px), md (768px), lg (1024px)
+- モバイルでスタックレイアウト、デスクトップでサイドバイサイド
+
+## 非同期コンポーネントパターン
+```typescript
+async function ServerComponent() {
+  const data = await fetchData();
+  return <ClientComponent data={data} />;
+}
+```
+
+## ユーザー体験指標
+- 振り返り作成から保存まで **3クリック以内**
+- 保存処理が **5秒以内** に完了
+- モバイルでも操作可能

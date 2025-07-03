@@ -1,0 +1,37 @@
+# Error Handling Patterns
+
+## Loading States
+- コンテンツにスケルトンローダー表示
+- アクションにスピナー使用
+- 保存状態の明確なフィードバック提供
+
+## エラーハンドリング
+- エラーのトースト通知
+- インラインバリデーションメッセージ
+- 失敗操作の再試行メカニズム
+
+## エラーバウンダリパターン
+```typescript
+'use client';
+
+export function ErrorBoundary({ children }: { children: React.ReactNode }) {
+  // Error boundary implementation
+}
+```
+
+## フォームハンドリング
+```typescript
+function Form() {
+  const [formData, setFormData] = useState({});
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Form logic with error handling
+}
+```
+
+## 成功定義
+- [ ] GitHub OAuth認証が正常動作
+- [ ] Markdownエディターでテキスト入力・プレビュー可能
+- [ ] 保存ボタンクリックでGitHubにファイル作成
+- [ ] エラー時の適切なフィードバック表示

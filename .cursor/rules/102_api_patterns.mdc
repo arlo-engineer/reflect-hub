@@ -1,0 +1,46 @@
+# API Route Patterns
+
+## 標準レスポンス形式
+```typescript
+// lib/api-response.ts
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  message?: string;
+}
+
+// API route例
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    // Process request
+    return NextResponse.json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    return NextResponse.json({
+      success: false,
+      error: error.message
+    }, { status: 500 });
+  }
+}
+```
+
+## バリデーション
+```typescript
+// lib/validations.ts
+import { z } from 'zod';
+
+export const reflectionSchema = z.object({
+  content: z.string().min(1, '振り返り内容を入力してください'),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日付形式が正しくありません')
+});
+```
+
+## エンドポイント例
+- `GET /api/github/repos` - リポジトリ一覧取得
+- `POST /api/github/save-reflection` - 振り返り保存
+- `GET /api/user/profile` - ユーザープロファイル取得
+- `PUT /api/user/profile` - デフォルトリポジトリ設定
