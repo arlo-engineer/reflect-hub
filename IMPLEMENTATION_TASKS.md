@@ -27,11 +27,11 @@
 
 ### 1.3 認証システム実装
 
-- [ ] Supabase Auth ヘルパー インストール・設定
-- [ ] `lib/supabase/client.ts` 作成
-- [ ] `hooks/use-auth.ts` カスタムフック作成
-- [ ] `middleware.ts` 保護されたルート設定
-- [ ] 認証コンテキスト Provider 作成
+- [x] Supabase Auth ヘルパー インストール・設定
+- [x] `lib/supabase/client.ts` 作成
+- [x] `hooks/use-auth.ts` カスタムフック作成
+- [x] `middleware.ts` 保護されたルート設定
+- [x] 認証コンテキスト Provider 作成
 
 ### 1.4 基本レイアウト・ページ
 
