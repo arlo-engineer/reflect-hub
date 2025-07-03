@@ -1,0 +1,437 @@
+# GitHub連携振り返りサービス MVP - Cursor Rules
+
+## Project Overview
+GitHub-integrated reflection service MVP that allows users to create Markdown reflections and save them to GitHub with one click. Design inspired by Notion's clean, minimalist aesthetic.
+
+## Tech Stack
+- **Frontend**: Next.js 14+ (App Router), TypeScript, Tailwind CSS, shadcn/ui
+- **Backend**: Next.js API Routes, Supabase Auth & Database
+- **Markdown Editor**: @uiw/react-md-editor
+- **GitHub Integration**: Octokit/rest
+- **Deployment**: Vercel
+
+## Code Style & Standards
+
+### TypeScript
+- Use strict TypeScript configuration
+- Prefer explicit types over `any`
+- Use interface for object shapes, type for unions/primitives
+- Export types and interfaces from dedicated `types/` directory
+- Use proper error handling with typed error objects
+
+```typescript
+// Good
+interface ReflectionData {
+  content: string;
+  date: string;
+  fileName: string;
+}
+
+type SaveStatus = 'idle' | 'saving' | 'success' | 'error';
+
+// Error handling
+interface ApiError {
+  message: string;
+  status: number;
+  code?: string;
+}
+```
+
+### Next.js App Router Patterns
+- Use `app/` directory structure
+- Prefer Server Components when possible
+- Use Client Components only when necessary (interactions, hooks)
+- Implement proper loading and error boundaries
+- Use proper metadata API for SEO
+
+```typescript
+// app/reflection/page.tsx
+export const metadata = {
+  title: '振り返り作成 | Reflection Service',
+  description: 'GitHub連携振り返りサービス'
+};
+
+export default function ReflectionPage() {
+  return <ReflectionEditor />;
+}
+```
+
+### Component Architecture
+- Use functional components with hooks
+- Implement proper prop types with TypeScript
+- Follow single responsibility principle
+- Create reusable UI components in `components/ui/`
+- Business logic components in `components/features/`
+
+```typescript
+// components/features/reflection-editor.tsx
+interface ReflectionEditorProps {
+  initialContent?: string;
+  onSave: (content: string) => Promise<void>;
+  isLoading?: boolean;
+}
+
+export function ReflectionEditor({ initialContent = '', onSave, isLoading }: ReflectionEditorProps) {
+  // Component logic
+}
+```
+
+## File Structure
+```
+├── app/
+│   ├── (auth)/
+│   │   ├── login/
+│   │   └── setup/
+│   ├── reflection/
+│   ├── api/
+│   │   ├── github/
+│   │   └── user/
+│   ├── globals.css
+│   ├── layout.tsx
+│   └── page.tsx
+├── components/
+│   ├── ui/           # shadcn/ui components
+│   ├── features/     # Business logic components
+│   └── layout/       # Layout components
+├── lib/
+│   ├── supabase/
+│   ├── github/
+│   ├── utils.ts
+│   └── validations.ts
+├── types/
+├── hooks/
+└── providers/
+```
+
+## Notion-Inspired Design Guidelines
+
+### Color Palette
+```css
+/* Primary Colors */
+--notion-bg: #ffffff;
+--notion-bg-secondary: #f7f6f3;
+--notion-text: #37352f;
+--notion-text-light: #787774;
+--notion-border: #e9e9e7;
+--notion-accent: #2eaadc;
+
+/* Status Colors */
+--success: #0f7b0f;
+--warning: #cb912f;
+--error: #e03e3e;
+```
+
+### Typography
+- Use system fonts: Inter, -apple-system, BlinkMacSystemFont
+- Font weights: 400 (normal), 500 (medium), 600 (semibold)
+- Clear hierarchy with consistent spacing
+
+### UI Components
+- Clean, minimal design with subtle borders and shadows
+- Rounded corners: 6px for small elements, 8px for cards
+- Consistent spacing using Tailwind's scale
+- Hover states with subtle transitions
+
+```typescript
+// Example button component inspired by Notion
+<Button 
+  variant="primary" 
+  className="bg-notion-accent hover:bg-blue-600 text-white font-medium px-4 py-2 rounded-md transition-colors"
+>
+  保存
+</Button>
+```
+
+## Authentication Patterns
+
+### Supabase Auth Integration
+```typescript
+// lib/supabase/client.ts
+import { createClientComponentClient } from '@supabase/auth-helpers-nextjs';
+
+export const supabase = createClientComponentClient();
+
+// hooks/use-auth.ts
+export function useAuth() {
+  const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
+  
+  // Auth logic
+}
+```
+
+### Protected Routes
+```typescript
+// middleware.ts
+export async function middleware(request: NextRequest) {
+  const res = NextResponse.next();
+  const supabase = createMiddlewareClient({ req: request, res });
+  await supabase.auth.getSession();
+  return res;
+}
+```
+
+## GitHub Integration Patterns
+
+### Repository Management
+```typescript
+// lib/github/client.ts
+import { Octokit } from '@octokit/rest';
+
+export class GitHubClient {
+  private octokit: Octokit;
+  
+  constructor(accessToken: string) {
+    this.octokit = new Octokit({ auth: accessToken });
+  }
+  
+  async saveReflection(content: string, fileName: string, repo: string) {
+    // Implementation
+  }
+}
+```
+
+### Error Handling for GitHub API
+```typescript
+try {
+  await githubClient.saveReflection(content, fileName, repoPath);
+} catch (error) {
+  if (error instanceof GitHubApiError) {
+    // Handle GitHub-specific errors
+  }
+  throw new Error('Failed to save reflection');
+}
+```
+
+## Database Patterns
+
+### Supabase Schema
+```sql
+-- Follow the provided schema exactly
+CREATE TABLE user_profiles (
+  id UUID REFERENCES auth.users(id) PRIMARY KEY,
+  github_username TEXT NOT NULL,
+  github_avatar_url TEXT,
+  default_repo_owner TEXT,
+  default_repo_name TEXT,
+  github_access_token TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+```
+
+### Database Utilities
+```typescript
+// lib/supabase/queries.ts
+export async function getUserProfile(userId: string) {
+  const { data, error } = await supabase
+    .from('user_profiles')
+    .select('*')
+    .eq('id', userId)
+    .single();
+    
+  if (error) throw error;
+  return data;
+}
+```
+
+## API Route Patterns
+
+### Standard Response Format
+```typescript
+// lib/api-response.ts
+export interface ApiResponse<T = any> {
+  success: boolean;
+  data?: T;
+  error?: string;
+  message?: string;
+}
+
+// API route example
+export async function POST(request: Request) {
+  try {
+    const body = await request.json();
+    // Process request
+    return NextResponse.json({
+      success: true,
+      data: result
+    });
+  } catch (error) {
+    return NextResponse.json({
+      success: false,
+      error: error.message
+    }, { status: 500 });
+  }
+}
+```
+
+### Validation
+```typescript
+// lib/validations.ts
+import { z } from 'zod';
+
+export const reflectionSchema = z.object({
+  content: z.string().min(1, '振り返り内容を入力してください'),
+  date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/, '日付形式が正しくありません')
+});
+```
+
+## State Management
+
+### React Context for Global State
+```typescript
+// providers/app-provider.tsx
+interface AppContextType {
+  user: User | null;
+  defaultRepo: Repository | null;
+  saveStatus: SaveStatus;
+}
+
+export const AppContext = createContext<AppContextType | null>(null);
+```
+
+### Custom Hooks
+```typescript
+// hooks/use-reflection.ts
+export function useReflection() {
+  const [content, setContent] = useState('');
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+  
+  const saveReflection = useCallback(async () => {
+    setSaveStatus('saving');
+    try {
+      await api.saveReflection(content);
+      setSaveStatus('success');
+    } catch (error) {
+      setSaveStatus('error');
+    }
+  }, [content]);
+  
+  return { content, setContent, saveReflection, saveStatus };
+}
+```
+
+## UI/UX Guidelines
+
+### Loading States
+- Show skeleton loaders for content
+- Use spinner for actions
+- Provide clear feedback for save states
+
+### Error Handling
+- Toast notifications for errors
+- Inline validation messages
+- Retry mechanisms for failed operations
+
+### Responsive Design
+- Mobile-first approach
+- Breakpoints: sm (640px), md (768px), lg (1024px)
+- Stack layout on mobile, side-by-side on desktop
+
+## Performance Optimization
+
+### Code Splitting
+```typescript
+// Dynamic imports for heavy components
+const MarkdownEditor = dynamic(() => import('@uiw/react-md-editor'), {
+  ssr: false,
+  loading: () => <EditorSkeleton />
+});
+```
+
+### Caching
+- Use React Query for GitHub API calls
+- Implement proper cache headers for API routes
+- Use Vercel's edge caching for static content
+
+## Security Best Practices
+
+### Environment Variables
+```env
+# Required environment variables
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+```
+
+### Token Management
+- Store GitHub tokens securely in Supabase
+- Implement token refresh logic
+- Never expose sensitive tokens to client-side
+
+## Testing Strategy
+
+### Unit Tests
+- Test utility functions
+- Test custom hooks
+- Test API route handlers
+
+### Integration Tests
+- Test authentication flow
+- Test GitHub integration
+- Test end-to-end reflection saving
+
+## Deployment
+
+### Vercel Configuration
+```json
+// vercel.json
+{
+  "framework": "nextjs",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install"
+}
+```
+
+### Environment Setup
+- Production, staging, and development environments
+- Proper environment variable management
+- Database migrations through Supabase CLI
+
+## MVP Success Criteria
+- [ ] GitHub OAuth authentication works
+- [ ] Markdown editor with real-time preview
+- [ ] One-click save to GitHub (under 3 clicks total)
+- [ ] Save process completes within 5 seconds
+- [ ] Mobile responsive design
+- [ ] Proper error handling and user feedback
+
+## Development Priorities
+1. **Phase 1**: Authentication foundation (Supabase + GitHub OAuth)
+2. **Phase 2**: Core functionality (Markdown editor + GitHub save)
+3. **Phase 3**: UI/UX polish (Notion-inspired design + responsive)
+
+## Common Patterns
+
+### Async Component Pattern
+```typescript
+async function ServerComponent() {
+  const data = await fetchData();
+  return <ClientComponent data={data} />;
+}
+```
+
+### Error Boundary Pattern
+```typescript
+'use client';
+
+export function ErrorBoundary({ children }: { children: React.ReactNode }) {
+  // Error boundary implementation
+}
+```
+
+### Form Handling Pattern
+```typescript
+function Form() {
+  const [formData, setFormData] = useState({});
+  const [errors, setErrors] = useState({});
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  
+  // Form logic
+}
+```
+
+Remember: Focus on the MVP core functionality first - "振り返り作成 → 保存 → GitHub自動Push" - then enhance with Notion-inspired polish.
