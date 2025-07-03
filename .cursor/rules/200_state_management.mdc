@@ -1,0 +1,40 @@
+# State Management Patterns
+
+## React Context for Global State
+```typescript
+// providers/app-provider.tsx
+interface AppContextType {
+  user: User | null;
+  defaultRepo: Repository | null;
+  saveStatus: SaveStatus;
+}
+
+export const AppContext = createContext<AppContextType | null>(null);
+```
+
+## カスタムフック
+```typescript
+// hooks/use-reflection.ts
+export function useReflection() {
+  const [content, setContent] = useState('');
+  const [saveStatus, setSaveStatus] = useState<SaveStatus>('idle');
+  
+  const saveReflection = useCallback(async () => {
+    setSaveStatus('saving');
+    try {
+      await api.saveReflection(content);
+      setSaveStatus('success');
+    } catch (error) {
+      setSaveStatus('error');
+    }
+  }, [content]);
+  
+  return { content, setContent, saveReflection, saveStatus };
+}
+```
+
+## 状態管理原則
+- useStateとuseEffectを最小化
+- contextとreducersでグローバル状態管理を優先
+- 重複を避けるためのmemoization使用
+- 早期リターンと適切なエラーハンドリング

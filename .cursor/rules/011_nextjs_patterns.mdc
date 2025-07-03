@@ -1,0 +1,33 @@
+# Next.js App Router Patterns
+
+## ディレクトリ構造
+- `app/`ディレクトリ構造使用
+- 可能な限りServer Componentsを優先
+- 必要時のみClient Components (`use client`)
+- 適切なloading/errorバウンダリ実装
+- SEOのためのメタデータAPI使用
+
+## Server Components例
+```typescript
+// app/reflection/page.tsx
+export const metadata = {
+  title: '振り返り作成 | Reflection Service',
+  description: 'GitHub連携振り返りサービス'
+};
+
+export default function ReflectionPage() {
+  return <ReflectionEditor />;
+}
+```
+
+## Component架構
+- 機能コンポーネントとフック使用
+- TypeScriptで適切なprop型
+- 単一責任原則に従う
+- `components/ui/`に再利用可能UIコンポーネント
+- `components/features/`にビジネスロジックコンポーネント
+
+## API Routes標準
+- 一貫したレスポンス形式
+- 適切なエラーハンドリング
+- Zodでバリデーション

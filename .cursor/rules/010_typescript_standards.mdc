@@ -1,0 +1,32 @@
+# TypeScript Standards
+
+## コードスタイル
+- strict TypeScriptコンフィグ使用
+- `any`より明示的な型を優先
+- オブジェクト形状にはinterface、ユニオン/プリミティブにはtype使用
+- `types/`ディレクトリから型をエクスポート
+- 型付きエラーオブジェクトで適切なエラーハンドリング
+
+## 型定義例
+```typescript
+interface ReflectionData {
+  content: string;
+  date: string;
+  fileName: string;
+}
+
+type SaveStatus = 'idle' | 'saving' | 'success' | 'error';
+```
+
+## エラーハンドリング
+```typescript
+interface ApiError {
+  message: string;
+  status: number;
+  code?: string;
+}
+```
+
+## パラメータ渡し
+- 単一オブジェクトとして渡す（名前付きパラメータパターン）
+- 関数の最初に型安全性チェック

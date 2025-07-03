@@ -1,0 +1,27 @@
+# GitHub連携振り返りサービス MVP ワークスペース
+
+## プロジェクト概要
+Markdownで振り返りを作成し、ワンクリックでGitHubに自動Pushするサービス
+
+## 核心機能
+**振り返り作成 → 保存ボタンクリック → GitHub自動Push** のシンプルなワンクリック保存
+
+## 技術スタック
+- **Frontend**: Next.js 14+ (App Router), TypeScript, Tailwind CSS, shadcn/ui
+- **Backend**: Next.js API Routes, Supabase Auth & Database  
+- **Markdown Editor**: @uiw/react-md-editor
+- **GitHub Integration**: Octokit/rest
+- **Deployment**: Vercel
+
+## 主要ディレクトリ
+- `app/`: Next.js App Router構造
+- `components/`: 再利用可能コンポーネント
+- `lib/`: ユーティリティとヘルパー
+- `types/`: TypeScript型定義
+- `hooks/`: カスタムフック
+
+## 制約
+- MVPフォーカス: 最小限の機能に集中
+- Notion風デザイン: クリーンで最小限
+- 3クリック以内: ユーザー体験の最適化
+- 5秒以内: 保存処理の完了時間

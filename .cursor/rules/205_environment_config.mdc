@@ -1,0 +1,39 @@
+# Environment Configuration
+
+## 必要な環境変数
+```bash
+# Supabase
+NEXT_PUBLIC_SUPABASE_URL=
+NEXT_PUBLIC_SUPABASE_ANON_KEY=
+SUPABASE_SERVICE_ROLE_KEY=
+
+# GitHub OAuth (Supabase設定で使用)
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+```
+
+## セキュリティベストプラクティス
+- GitHubトークンはSupabaseに安全に保存
+- トークンリフレッシュロジック実装
+- 機密トークンをクライアントサイドに露出しない
+- HTTPS使用とCSRF保護
+
+## トークン管理
+- GitHub access tokenの暗号化保存
+- 適切なスコープ制限
+- トークン有効期限の監視
+
+## MVP制約（無料プラン）
+### GitHub API制限
+- 認証済みユーザー: 5,000リクエスト/時間
+- ファイルサイズ制限: 1MB
+
+### Supabase制限
+- データベース容量: 500MB
+- 月間アクティブユーザー: 50,000人
+
+## 開発開始準備
+- [ ] Supabaseアカウント作成・プロジェクト作成
+- [ ] GitHub OAuth App作成
+- [ ] Vercelアカウント準備
+- [ ] 環境変数の適切な設定

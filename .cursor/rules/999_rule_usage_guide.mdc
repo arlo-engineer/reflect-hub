@@ -1,0 +1,33 @@
+# Rule Usage Guide
+
+## 組織化された規則構造
+
+### 001-099: Core/Workspace Rules
+- `001_workspace.mdc` - プロジェクト全体の制約とアーキテクチャ
+- `002_cursor_rules.mdc` - .mdcファイルの構造とベストプラクティス
+- `010_typescript_standards.mdc` - TypeScript開発標準
+- `011_nextjs_patterns.mdc` - Next.js App Routerパターン
+- `020_notion_design.mdc` - Notion風デザインシステム
+
+### 100-199: Integration Rules
+- `100_supabase_auth.mdc` - Supabase認証統合
+- `101_github_integration.mdc` - GitHub API統合
+- `102_api_patterns.mdc` - API Routeパターン
+
+### 200-299: Pattern Rules
+- `200_state_management.mdc` - 状態管理パターン
+- `201_error_handling.mdc` - エラーハンドリング
+- `202_performance.mdc` - パフォーマンス最適化
+- `203_markdown_processing.mdc` - Markdown処理
+- `204_development_workflow.mdc` - 開発ワークフロー
+- `205_environment_config.mdc` - 環境設定
+
+## 使用方法
+- 規則は番号順に優先度設定
+- 高い番号の規則が競合時に優先
+- `@filename.mdc`でファイル参照可能
+- 関連規則間の相互参照を活用
+
+## MVPフォーカス
+全ての規則は「振り返り作成 → 保存 → GitHub自動Push」の核心機能をサポート
+Notion風の洗練されたデザインで3クリック以内の操作を実現

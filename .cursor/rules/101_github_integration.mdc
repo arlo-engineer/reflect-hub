@@ -1,0 +1,49 @@
+# GitHub Integration Patterns
+
+## リポジトリ管理
+```typescript
+// lib/github/client.ts
+import { Octokit } from '@octokit/rest';
+
+export class GitHubClient {
+  private octokit: Octokit;
+  
+  constructor(accessToken: string) {
+    this.octokit = new Octokit({ auth: accessToken });
+  }
+  
+  async saveReflection(content: string, fileName: string, repo: string) {
+    // Implementation
+  }
+}
+```
+
+## エラーハンドリング
+```typescript
+try {
+  await githubClient.saveReflection(content, fileName, repoPath);
+} catch (error) {
+  if (error instanceof GitHubApiError) {
+    // Handle GitHub-specific errors
+  }
+  throw new Error('Failed to save reflection');
+}
+```
+
+## API制限
+- 認証済みユーザー: 5,000リクエスト/時間
+- ファイルサイズ制限: 1MB
+- 適切なレート制限ハンドリング実装
+
+## ファイル構造
+```
+reflections/
+├── 2025-01-15.md
+├── 2025-01-16.md
+└── 2025-01-17.md
+```
+
+## セキュリティ
+- GitHubトークンはSupabaseに安全に保存
+- トークンリフレッシュロジック実装
+- クライアントサイドに機密トークン露出しない
