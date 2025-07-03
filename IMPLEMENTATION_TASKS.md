@@ -18,12 +18,12 @@
 
 ### 1.2 Supabase プロジェクト設定
 
-- [ ] Supabase アカウント作成・プロジェクト作成
-- [ ] データベーススキーマ設計・作成
-  - [ ] `user_profiles` テーブル作成
-  - [ ] RLS (Row Level Security) 設定
-- [ ] GitHub OAuth Provider 設定
-- [ ] 環境変数設定 (.env.local)
+- [x] Supabase アカウント作成・プロジェクト作成
+- [x] データベーススキーマ設計・作成
+  - [x] `user_profiles` テーブル作成
+  - [x] RLS (Row Level Security) 設定
+- [x] GitHub OAuth Provider 設定
+- [x] 環境変数設定 (.env.local)
 
 ### 1.3 認証システム実装
 
