@@ -35,10 +35,10 @@
 
 ### 1.4 基本レイアウト・ページ
 
-- [ ] `app/layout.tsx` ルートレイアウト
-- [ ] `app/page.tsx` ランディングページ
-- [ ] `app/(auth)/login/page.tsx` ログインページ
-- [ ] ログイン・ログアウト機能
+- [x] `app/layout.tsx` ルートレイアウト
+- [x] `app/page.tsx` ランディングページ
+- [x] `app/(auth)/login/page.tsx` ログインページ
+- [x] ログイン・ログアウト機能
 
 ---
 
