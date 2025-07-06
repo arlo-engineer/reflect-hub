@@ -121,8 +121,7 @@ export function ReflectionEditor({
               preview="edit"
               height={500}
               data-color-mode="light"
-              toolbarHeight={60}
-              visibleDragBar={false}
+              visibleDragbar={false}
             />
           </div>
         </CardContent>

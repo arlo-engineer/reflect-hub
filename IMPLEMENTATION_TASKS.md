@@ -69,18 +69,18 @@
 
 ### 2.4 保存機能（核心機能）
 
-- [ ] `app/api/github/save-reflection/route.ts` API
-- [ ] GitHub ファイル作成・更新ロジック
-- [ ] コミットメッセージ自動生成
-- [ ] 保存状態管理 (idle/saving/success/error)
-- [ ] エラーハンドリング・再試行機能
+- [x] `app/api/github/save-reflection/route.ts` API
+- [x] GitHub ファイル作成・更新ロジック
+- [x] コミットメッセージ自動生成
+- [x] 保存状態管理 (idle/saving/success/error)
+- [x] エラーハンドリング・再試行機能
 
 ### 2.5 メイン画面統合
 
-- [ ] `app/reflection/page.tsx` - 振り返り作成画面
-- [ ] エディター + プレビュー レイアウト
-- [ ] 保存ボタン実装
-- [ ] 保存状態フィードバック UI
+- [x] `app/reflection/page.tsx` - 振り返り作成画面
+- [x] エディター + プレビュー レイアウト
+- [x] 保存ボタン実装
+- [x] 保存状態フィードバック UI
 
 ---
 
