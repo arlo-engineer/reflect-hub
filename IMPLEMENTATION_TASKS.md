@@ -53,11 +53,11 @@
 
 ### 2.2 リポジトリ管理機能
 
-- [ ] `app/api/github/repos/route.ts` - リポジトリ一覧取得 API
-- [ ] `app/(auth)/setup/page.tsx` - リポジトリ選択画面
-- [ ] ユーザープロファイル管理
-  - [ ] デフォルトリポジトリ選択・保存
-  - [ ] `app/api/user/profile/route.ts` API
+- [x] `app/api/github/repos/route.ts` - リポジトリ一覧取得 API
+- [x] `app/(auth)/setup/page.tsx` - リポジトリ選択画面
+- [x] ユーザープロファイル管理
+  - [x] デフォルトリポジトリ選択・保存
+  - [x] `app/api/user/profile/route.ts` API
 
 ### 2.3 Markdown エディター実装
 
