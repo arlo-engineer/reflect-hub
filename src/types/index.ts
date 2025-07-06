@@ -1,4 +1,4 @@
-import { User as SupabaseUser } from "@supabase/auth-helpers-nextjs";
+import { User as SupabaseUser } from "@supabase/supabase-js";
 
 // 振り返りデータの型定義
 export interface ReflectionData {

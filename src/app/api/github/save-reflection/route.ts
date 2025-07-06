@@ -6,14 +6,19 @@ import { ReflectionData } from '@/types/github';
 
 export async function POST(request: NextRequest) {
   try {
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const supabase = createServerClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!,
       {
         cookies: {
-          get(name: string) {
-            return cookieStore.get(name)?.value;
+          getAll() {
+            return cookieStore.getAll()
+          },
+          setAll(cookiesToSet) {
+            cookiesToSet.forEach(({ name, value, options }) => {
+              cookieStore.set(name, value, options)
+            })
           },
         },
       }
@@ -43,9 +48,9 @@ export async function POST(request: NextRequest) {
     const { content, fileName, repository } = body;
 
     // Validate required fields
-    if (!content || !fileName || !repository) {
+    if (!content || !fileName) {
       return NextResponse.json(
-        { error: 'Missing required fields: content, fileName, or repository' },
+        { error: 'Missing required fields: content or fileName' },
         { status: 400 }
       );
     }
@@ -61,7 +66,7 @@ export async function POST(request: NextRequest) {
     // Get user profile to check default repository
     const { data: profile, error: profileError } = await supabase
       .from('user_profiles')
-      .select('github_username, default_repository')
+      .select('github_username, default_repo_owner, default_repo_name')
       .eq('id', session.user.id)
       .single();
 
@@ -72,11 +77,15 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // Use provided repository or default repository
-    const repoPath = repository || profile.default_repository;
+    // Use provided repository or construct from default repository fields
+    let repoPath = repository;
+    if (!repoPath && profile.default_repo_owner && profile.default_repo_name) {
+      repoPath = `${profile.default_repo_owner}/${profile.default_repo_name}`;
+    }
+    
     if (!repoPath) {
       return NextResponse.json(
-        { error: 'No repository specified and no default repository set' },
+        { error: 'No repository specified and no default repository set. Please set a default repository in your profile.' },
         { status: 400 }
       );
     }
