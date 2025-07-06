@@ -46,10 +46,10 @@
 
 ### 2.1 GitHub API 統合
 
-- [ ] GitHub OAuth App 作成・設定
-- [ ] `lib/github/client.ts` GitHubClient クラス実装
-- [ ] GitHub API エラーハンドリング
-- [ ] API レート制限対応
+- [x] GitHub OAuth App 作成・設定
+- [x] `lib/github/client.ts` GitHubClient クラス実装
+- [x] GitHub API エラーハンドリング
+- [x] API レート制限対応
 
 ### 2.2 リポジトリ管理機能
 
