@@ -24,6 +24,7 @@ export function ReflectionEditor({
   const [filename, setFilename] = React.useState("");
   const [currentDate, setCurrentDate] = React.useState("");
   const [mobilePreview, setMobilePreview] = React.useState(false);
+  const [isMobile, setIsMobile] = React.useState(false);
 
   // Auto-set today's date and generate filename
   React.useEffect(() => {
@@ -31,6 +32,18 @@ export function ReflectionEditor({
     const formattedDate = today.toISOString().split('T')[0]; // YYYY-MM-DD format
     setCurrentDate(formattedDate);
     setFilename(`${formattedDate}.md`);
+  }, []);
+
+  // Check if mobile on client side
+  React.useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
   // Generate default content template with today's date
@@ -146,7 +159,7 @@ export function ReflectionEditor({
               onChange={(value) => setContent(value || "")}
               preview={mobilePreview ? "preview" : "edit"}
               hideToolbar={false}
-              height={window.innerWidth < 768 ? 400 : 500}
+              height={isMobile ? 400 : 500}
               data-color-mode="light"
               visibleDragbar={false}
               className="!border-none"
