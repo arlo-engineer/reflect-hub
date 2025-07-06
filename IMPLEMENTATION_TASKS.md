@@ -61,11 +61,11 @@
 
 ### 2.3 Markdown エディター実装
 
-- [ ] `@uiw/react-md-editor` インストール・設定
-- [ ] `components/features/reflection-editor.tsx` コンポーネント
-- [ ] リアルタイムプレビュー機能
-- [ ] 日付自動設定（今日の日付）
-- [ ] ファイル名自動生成 (`YYYY-MM-DD.md`)
+- [x] `@uiw/react-md-editor` インストール・設定
+- [x] `components/features/reflection-editor.tsx` コンポーネント
+- [x] リアルタイムプレビュー機能
+- [x] 日付自動設定（今日の日付）
+- [x] ファイル名自動生成 (`YYYY-MM-DD.md`)
 
 ### 2.4 保存機能（核心機能）
 
