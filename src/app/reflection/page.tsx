@@ -4,10 +4,12 @@ import { useState } from 'react';
 import { ReflectionEditor } from '@/components/features/reflection-editor';
 import { Button } from '@/components/ui/button';
 import { Alert, AlertDescription } from '@/components/ui/alert';
+import { MobileNavigation, useMobileNavigation } from '@/components/layout/mobile-navigation';
 import { CheckCircle, XCircle, RefreshCw } from 'lucide-react';
 import { ReflectionData } from '@/types/github';
 
 export default function ReflectionPage() {
+  const mobileNav = useMobileNavigation();
   const [saveState, setSaveState] = useState<{
     isLoading: boolean;
     error: string | null;
@@ -108,17 +110,24 @@ export default function ReflectionPage() {
   };
 
   return (
-    <div className="notion-editor">
-      <div className="notion-page">
-        <div className="notion-block">
-          <h1 className="notion-h1 mb-8">振り返り作成</h1>
-        </div>
-        
-        <div className="notion-block">
-          <p className="notion-text text-muted-foreground mb-6">
-            今日の振り返りを書いて、ワンクリックでGitHubに保存しましょう。
-          </p>
-        </div>
+    <>
+      <MobileNavigation
+        isOpen={mobileNav.isOpen}
+        onToggle={mobileNav.toggle}
+        onClose={mobileNav.close}
+      />
+      
+      <div className="notion-editor">
+        <div className="notion-page">
+          <div className="notion-block">
+            <h1 className="notion-h1 mb-6 sm:mb-8 pl-12 sm:pl-0">振り返り作成</h1>
+          </div>
+          
+          <div className="notion-block">
+            <p className="notion-text text-muted-foreground mb-4 sm:mb-6 pl-12 sm:pl-0">
+              今日の振り返りを書いて、ワンクリックでGitHubに保存しましょう。
+            </p>
+          </div>
         
         {/* Success Alert */}
         {saveState.success && (
@@ -180,5 +189,6 @@ export default function ReflectionPage() {
         )}
       </div>
     </div>
+    </>
   );
 }
