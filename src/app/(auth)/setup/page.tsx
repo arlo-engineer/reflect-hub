@@ -144,10 +144,7 @@ export default function SetupPage() {
     }
   };
 
-  // スキップして後で設定
-  const handleSkip = () => {
-    router.push('/reflection');
-  };
+
 
   if (loading) {
     return (
@@ -267,14 +264,7 @@ export default function SetupPage() {
         </Card>
 
         {/* 操作ボタン */}
-        <div className="flex justify-between">
-          <Button
-            variant="outline"
-            onClick={handleSkip}
-            disabled={saving}
-          >
-            スキップ
-          </Button>
+        <div className="flex justify-end">
           <Button
             onClick={handleSaveDefaultRepo}
             disabled={!selectedRepo || saving}
