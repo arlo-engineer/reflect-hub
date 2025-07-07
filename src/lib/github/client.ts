@@ -116,6 +116,90 @@ export class GitHubClient {
   }
 
   /**
+   * Get reflection files from repository
+   */
+  async getReflectionFiles(repoPath: string): Promise<Array<{
+    name: string;
+    path: string;
+    sha: string;
+    size: number;
+    download_url: string;
+  }>> {
+    try {
+      await this.checkRateLimit();
+      
+      const [owner, repo] = repoPath.split('/');
+      const { data, headers } = await this.octokit.rest.repos.getContent({
+        owner,
+        repo,
+        path: 'reflections',
+      });
+
+      this.updateRateLimit(headers);
+      
+      if (Array.isArray(data)) {
+        // Filter for .md files only
+        return data
+          .filter(file => file.type === 'file' && file.name.endsWith('.md'))
+          .map(file => ({
+            name: file.name,
+            path: file.path,
+            sha: file.sha,
+            size: file.size,
+            download_url: file.download_url || '',
+          }))
+          .sort((a, b) => b.name.localeCompare(a.name)); // Sort by name descending (newest first)
+      }
+      
+      return [];
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  /**
+   * Get specific reflection file content
+   */
+  async getReflectionFile(repoPath: string, fileName: string): Promise<string> {
+    try {
+      await this.checkRateLimit();
+      
+      const [owner, repo] = repoPath.split('/');
+      const path = `reflections/${fileName}`;
+      
+      const { data, headers } = await this.octokit.rest.repos.getContent({
+        owner,
+        repo,
+        path,
+      });
+
+      this.updateRateLimit(headers);
+      
+      if ('content' in data && data.content) {
+        // Decode base64 content - remove newlines first
+        const base64Content = data.content.replace(/\n/g, '');
+        try {
+          // Modern approach to decode UTF-8 from base64
+          const binaryString = atob(base64Content);
+          const bytes = new Uint8Array(binaryString.length);
+          for (let i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+          }
+          return new TextDecoder('utf-8').decode(bytes);
+        } catch (decodeError) {
+          console.error('Failed to decode file content:', decodeError);
+          // Fallback to simple atob
+          return atob(base64Content);
+        }
+      }
+      
+      throw new GitHubApiError('File content not found', 404);
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  /**
    * Get current rate limit status
    */
   async getRateLimitStatus(): Promise<GitHubRateLimit> {
