@@ -3,13 +3,14 @@
 import { useState } from 'react';
 import { ReflectionEditor } from '@/components/features/reflection-editor';
 import { Button } from '@/components/ui/button';
-import { Alert, AlertDescription } from '@/components/ui/alert';
 import { MobileNavigation, useMobileNavigation } from '@/components/layout/mobile-navigation';
-import { CheckCircle, XCircle, RefreshCw } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { CheckCircle, RefreshCw, ExternalLink } from 'lucide-react';
 import { ReflectionData } from '@/types/github';
 
 export default function ReflectionPage() {
   const mobileNav = useMobileNavigation();
+  const { toast } = useToast();
   const [saveState, setSaveState] = useState<{
     isLoading: boolean;
     error: string | null;
@@ -51,6 +52,13 @@ export default function ReflectionPage() {
         throw new Error('ファイル名は .md 形式である必要があります');
       }
 
+      // Show loading toast
+      toast({
+        title: "保存中...",
+        description: "振り返りをGitHubに保存しています",
+        variant: "default",
+      });
+
       // Prepare request data
       const requestData: ReflectionData = {
         content,
@@ -82,6 +90,26 @@ export default function ReflectionPage() {
         data: result.data,
       });
 
+      // Show success toast
+      toast({
+        title: "✅ 保存完了！",
+        description: "振り返りが正常にGitHubに保存されました",
+        variant: "default",
+        action: result.data?.url ? (
+          <Button
+            variant="outline"
+            size="sm"
+            asChild
+            className="ml-2"
+          >
+            <a href={result.data.url} target="_blank" rel="noopener noreferrer">
+              <ExternalLink className="h-3 w-3 mr-1" />
+              確認
+            </a>
+          </Button>
+        ) : undefined,
+      });
+
     } catch (error) {
       const errorMessage = error instanceof Error ? error.message : '予期しないエラーが発生しました';
       
@@ -90,6 +118,24 @@ export default function ReflectionPage() {
         error: errorMessage,
         success: false,
         data: null,
+      });
+
+      // Show error toast with retry option
+      toast({
+        title: "❌ 保存に失敗しました",
+        description: errorMessage,
+        variant: "destructive",
+        action: (
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleRetry}
+            disabled={saveState.isLoading}
+          >
+            <RefreshCw className="h-3 w-3 mr-1" />
+            再試行
+          </Button>
+        ),
       });
     }
   };
@@ -128,67 +174,37 @@ export default function ReflectionPage() {
               今日の振り返りを書いて、ワンクリックでGitHubに保存しましょう。
             </p>
           </div>
-        
-        {/* Success Alert */}
-        {saveState.success && (
-          <Alert className="mb-6 border-green-200 bg-green-50">
-            <CheckCircle className="h-4 w-4 text-green-600" />
-            <AlertDescription className="text-green-800">
-              振り返りが正常に保存されました！
-              {saveState.data?.url && (
-                <a
-                  href={saveState.data.url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="ml-2 underline hover:text-green-900"
-                >
-                  GitHubで確認
-                </a>
-              )}
-            </AlertDescription>
-          </Alert>
-        )}
 
-        {/* Error Alert */}
-        {saveState.error && (
-          <Alert className="mb-6 border-red-200 bg-red-50">
-            <XCircle className="h-4 w-4 text-red-600" />
-            <AlertDescription className="text-red-800">
-              {saveState.error}
+          {/* Success State Display */}
+          {saveState.success && (
+            <div className="mb-6 flex items-center justify-center">
+              <div className="flex items-center space-x-2 text-green-600">
+                <CheckCircle className="h-5 w-5" />
+                <span className="text-sm font-medium">保存完了！</span>
+              </div>
+            </div>
+          )}
+
+          {/* Reflection Editor */}
+          <ReflectionEditor
+            onSave={handleSave}
+            isSaving={saveState.isLoading}
+          />
+
+          {/* Reset Button */}
+          {saveState.success && (
+            <div className="mt-6 flex justify-center">
               <Button
                 variant="outline"
-                size="sm"
-                onClick={handleRetry}
-                className="ml-2 h-6 text-xs"
-                disabled={saveState.isLoading}
+                onClick={resetState}
+                className="text-sm"
               >
-                <RefreshCw className="h-3 w-3 mr-1" />
-                再試行
+                新しい振り返りを作成
               </Button>
-            </AlertDescription>
-          </Alert>
-        )}
-
-        {/* Reflection Editor */}
-        <ReflectionEditor
-          onSave={handleSave}
-          isSaving={saveState.isLoading}
-        />
-
-        {/* Reset Button */}
-        {(saveState.success || saveState.error) && (
-          <div className="mt-4 flex justify-center">
-            <Button
-              variant="outline"
-              onClick={resetState}
-              className="text-sm"
-            >
-              新しい振り返りを作成
-            </Button>
-          </div>
-        )}
+            </div>
+          )}
+        </div>
       </div>
-    </div>
     </>
   );
 }
