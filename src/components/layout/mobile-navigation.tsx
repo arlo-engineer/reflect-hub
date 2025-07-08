@@ -2,7 +2,7 @@
 
 import * as React from "react";
 import { Button } from "@/components/ui/button";
-import { Menu, X, Home, Edit3, Settings, LogOut } from "lucide-react";
+import { Menu, X, Home, Edit3, History, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface MobileNavigationProps {
@@ -15,6 +15,7 @@ export function MobileNavigation({ isOpen, onToggle, onClose }: MobileNavigation
   const navItems = [
     { icon: Home, label: "ホーム", href: "/" },
     { icon: Edit3, label: "振り返り作成", href: "/reflection" },
+    { icon: History, label: "振り返り履歴", href: "/history" },
     { icon: Settings, label: "設定", href: "/settings" },
   ];
 

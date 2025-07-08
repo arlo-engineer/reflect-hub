@@ -200,6 +200,49 @@ export class GitHubClient {
   }
 
   /**
+   * Delete reflection file from GitHub repository
+   */
+  async deleteReflectionFile(
+    owner: string,
+    repo: string,
+    filename: string
+  ): Promise<void> {
+    try {
+      await this.checkRateLimit();
+      
+      const path = `reflections/${filename}`;
+      
+      // Get current file to obtain SHA
+      const { data: fileData } = await this.octokit.rest.repos.getContent({
+        owner,
+        repo,
+        path,
+      });
+      
+      if (Array.isArray(fileData)) {
+        throw new GitHubApiError('Expected file but got directory', 422);
+      }
+      
+      if ('sha' in fileData) {
+        // Delete the file
+        const { headers } = await this.octokit.rest.repos.deleteFile({
+          owner,
+          repo,
+          path,
+          message: `Delete reflection: ${filename}`,
+          sha: fileData.sha,
+        });
+        
+        this.updateRateLimit(headers);
+      } else {
+        throw new GitHubApiError('File SHA not found', 422);
+      }
+    } catch (error) {
+      throw this.handleError(error);
+    }
+  }
+
+  /**
    * Get current rate limit status
    */
   async getRateLimitStatus(): Promise<GitHubRateLimit> {

@@ -23,12 +23,14 @@ interface ReflectionEditorProps {
   onSave?: (content: string, filename: string) => void;
   initialContent?: string;
   isSaving?: boolean;
+  initialFileName?: string;
 }
 
 export function ReflectionEditor({ 
   onSave, 
   initialContent = "", 
-  isSaving = false 
+  isSaving = false,
+  initialFileName
 }: ReflectionEditorProps) {
   const [content, setContent] = React.useState(initialContent);
   const [filename, setFilename] = React.useState("");
@@ -95,6 +97,17 @@ export function ReflectionEditor({
 
     fetchExistingFiles();
   }, []);
+
+  // 初期ファイル名が指定されている場合、そのファイルを読み込む
+  React.useEffect(() => {
+    if (initialFileName && existingFiles.length > 0) {
+      const fileExists = existingFiles.some(file => file.name === initialFileName);
+      if (fileExists) {
+        console.log('Loading initial file:', initialFileName);
+        handleExistingFileSelect(initialFileName);
+      }
+    }
+  }, [initialFileName, existingFiles]);
 
   // Generate default content template with today's date
   React.useEffect(() => {

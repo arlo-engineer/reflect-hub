@@ -1,15 +1,15 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import { ReflectionEditor } from '@/components/features/reflection-editor';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { MobileNavigation, useMobileNavigation } from '@/components/layout/mobile-navigation';
 import { useToast } from '@/hooks/use-toast';
-import { CheckCircle, RefreshCw, ExternalLink, GitBranch, Settings, Lock, Globe } from 'lucide-react';
+import { CheckCircle, RefreshCw, ExternalLink, GitBranch, Settings, Globe } from 'lucide-react';
 import { ReflectionData } from '@/types/github';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 interface UserProfile {
   id: string;
@@ -19,10 +19,11 @@ interface UserProfile {
   avatar_url: string | null;
 }
 
-export default function ReflectionPage() {
+function ReflectionPageContent() {
   const mobileNav = useMobileNavigation();
   const { toast } = useToast();
   const router = useRouter();
+  const searchParams = useSearchParams();
   
   const [profile, setProfile] = useState<UserProfile | null>(null);
   const [profileLoading, setProfileLoading] = useState(true);
@@ -322,6 +323,7 @@ export default function ReflectionPage() {
           <ReflectionEditor
             onSave={handleSave}
             isSaving={saveState.isLoading}
+            initialFileName={searchParams.get('file') || undefined}
           />
 
           {/* Reset Button */}
@@ -339,5 +341,17 @@ export default function ReflectionPage() {
         </div>
       </div>
     </>
+  );
+}
+
+export default function ReflectionPage() {
+  return (
+    <Suspense fallback={
+      <div className="flex min-h-screen items-center justify-center">
+        <div className="animate-spin rounded-full h-8 w-8 border-2 border-blue-600 border-t-transparent"></div>
+      </div>
+    }>
+      <ReflectionPageContent />
+    </Suspense>
   );
 }
