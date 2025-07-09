@@ -13,20 +13,23 @@ export default function AuthCallbackPage() {
   useEffect(() => {
     const handleAuthCallback = async () => {
       try {
-        const { data, error } = await supabase.auth.getSession();
+        // 環境変数の確認
+        if (typeof window !== 'undefined') {
+          const { data, error } = await supabase.auth.getSession();
 
-        if (error) {
-          console.error("認証エラー:", error);
-          router.push("/login?error=auth_callback_failed");
-          return;
-        }
+          if (error) {
+            console.error("認証エラー:", error);
+            router.push("/login?error=auth_callback_failed");
+            return;
+          }
 
-        if (data.session) {
-          // GitHubアクセストークンを取得・保存
-          await saveGitHubAccessToken(data.session);
-          router.push("/setup");
-        } else {
-          router.push("/login");
+          if (data.session) {
+            // GitHubアクセストークンを取得・保存
+            await saveGitHubAccessToken(data.session);
+            router.push("/setup");
+          } else {
+            router.push("/login");
+          }
         }
       } catch (error) {
         console.error("予期しないエラー:", error);
@@ -55,7 +58,10 @@ export default function AuthCallbackPage() {
       }
     };
 
-    handleAuthCallback();
+    // クライアントサイドでのみ実行
+    if (typeof window !== 'undefined') {
+      handleAuthCallback();
+    }
   }, [router]);
 
   return (
