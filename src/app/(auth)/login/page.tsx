@@ -5,6 +5,9 @@ import { signInWithGitHub } from "@/lib/supabase";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 
+// 動的レンダリングを強制
+export const dynamic = 'force-dynamic';
+
 export default function LoginPage() {
   const { user, loading } = useAuth();
   const router = useRouter();

@@ -18,8 +18,21 @@ Reflect Hubは、日々の振り返りを効率的に管理し、GitHubと連携
 - **Frontend**: Next.js 15 (App Router)
 - **Language**: TypeScript
 - **Styling**: Tailwind CSS
+- **Database**: Supabase
+- **Authentication**: GitHub OAuth
+- **Deployment**: Vercel
 - **Code Quality**: ESLint
 - **Version Control**: Git + GitHub
+
+## 🚀 Vercelデプロイ
+
+### クイックデプロイ
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2FYOUR_USERNAME%2Freflect-hub&env=NEXT_PUBLIC_SUPABASE_URL,NEXT_PUBLIC_SUPABASE_ANON_KEY&envDescription=Supabase%20credentials%20required&demo-title=Reflect%20Hub&demo-description=GitHub%E9%80%A3%E6%90%BA%E6%8C%AF%E3%82%8A%E8%BF%94%E3%82%8A%E3%82%B5%E3%83%BC%E3%83%93%E3%82%B9)
+
+### 詳細な手順
+
+詳しいデプロイ手順については、[VERCEL_DEPLOY_GUIDE.md](./VERCEL_DEPLOY_GUIDE.md)を参照してください。
 
 ## 開発環境のセットアップ
 
@@ -40,12 +53,27 @@ cd reflect-hub
 npm install
 ```
 
-3. 開発サーバーを起動
+3. 環境変数を設定
+```bash
+cp .env.local.example .env.local
+# .env.localファイルを編集して、Supabase設定を追加
+```
+
+4. 開発サーバーを起動
 ```bash
 npm run dev
 ```
 
 アプリケーションは [http://localhost:3000](http://localhost:3000) で確認できます。
+
+## 環境変数
+
+以下の環境変数を設定してください：
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_project_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+```
 
 ## スクリプト
 
@@ -59,15 +87,22 @@ npm run dev
 ```
 reflect-hub/
 ├── src/
-│   └── app/
-│       ├── globals.css
-│       ├── layout.tsx
-│       └── page.tsx
-├── public/
-├── next.config.js
-├── tailwind.config.js
-├── tsconfig.json
-└── package.json
+│   ├── app/                    # App Router
+│   │   ├── (auth)/            # 認証関連ページ
+│   │   ├── api/               # API Routes
+│   │   └── ...
+│   ├── components/            # UIコンポーネント
+│   ├── hooks/                 # カスタムフック
+│   ├── lib/                   # ユーティリティ関数
+│   └── types/                 # TypeScript型定義
+├── public/                    # 静的ファイル
+├── database/                  # データベース設定
+├── docs/                      # ドキュメント
+├── vercel.json               # Vercelデプロイ設定
+├── next.config.js            # Next.js設定
+├── tailwind.config.js        # Tailwind CSS設定
+├── tsconfig.json             # TypeScript設定
+└── package.json              # パッケージ設定
 ```
 
 ## Contributing
