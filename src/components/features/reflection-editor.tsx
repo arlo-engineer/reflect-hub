@@ -101,19 +101,17 @@ export function ReflectionEditor({
     if (initialContent === "" && currentDate && isNewFile) {
       const template = `# 振り返り - ${currentDate}
 
-## 今日やったこと
-- 
+### ✅ 今日実施したこと
+└ 業務・開発・学習で具体的にやったこと
 
-## 学んだこと
-- 
+### 💡 今日のアイデアの種
+└ 困ったこと・面倒だったこと
 
-## 改善点
-- 
+###   📚 今日の学び
+└ 新しく知ったこと・できるようになったこと
 
-## 明日やること
-- 
-
-## 所感
+### 🎯 明日やりたいこと
+└ 技術的チャレンジ・調べたいこと
 `;
       setContent(template);
       // Simulate loading time for better UX
