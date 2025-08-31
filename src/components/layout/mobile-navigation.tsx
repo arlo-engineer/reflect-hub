@@ -4,6 +4,7 @@ import * as React from "react";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Home, Edit3, Settings, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useLogout } from "@/hooks/useLogout";
 
 interface MobileNavigationProps {
   isOpen: boolean;
@@ -12,6 +13,8 @@ interface MobileNavigationProps {
 }
 
 export function MobileNavigation({ isOpen, onToggle, onClose }: MobileNavigationProps) {
+  const { logout, isLoading } = useLogout();
+  
   const navItems = [
     { icon: Home, label: "ホーム", href: "/" },
     { icon: Edit3, label: "振り返り作成", href: "/reflection" },
@@ -71,10 +74,14 @@ export function MobileNavigation({ isOpen, onToggle, onClose }: MobileNavigation
             <Button
               variant="ghost"
               className="w-full justify-start gap-3 px-3 py-3 text-sm font-medium touch-manipulation"
-              onClick={onClose}
+              onClick={() => {
+                onClose();
+                logout();
+              }}
+              disabled={isLoading}
             >
               <LogOut className="h-5 w-5" />
-              ログアウト
+              {isLoading ? "ログアウト中..." : "ログアウト"}
             </Button>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { MobileNavigation, useMobileNavigation } from '@/components/layout/mobile-navigation';
+import { LogoutButton } from '@/components/auth/logout-button';
 import { useToast } from '@/hooks/use-toast';
 import { CheckCircle, RefreshCw, ExternalLink, GitBranch, Settings, Lock, Globe } from 'lucide-react';
 import { ReflectionData } from '@/types/github';
@@ -226,8 +227,14 @@ export default function ReflectionPage() {
       
       <div className="notion-editor">
         <div className="notion-page">
-          <div className="notion-block">
-            <h1 className="notion-h1 mb-6 sm:mb-8 pl-12 sm:pl-0">振り返り作成</h1>
+          {/* Header with logout button */}
+          <div className="flex justify-between items-center mb-6 sm:mb-8">
+            <div className="notion-block flex-1">
+              <h1 className="notion-h1 pl-12 sm:pl-0">振り返り作成</h1>
+            </div>
+            <div className="hidden sm:block">
+              <LogoutButton />
+            </div>
           </div>
           
           <div className="notion-block">
